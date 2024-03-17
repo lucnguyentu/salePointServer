@@ -1,8 +1,9 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import ErrorHandler from '../utils/errorHandler';
+// import firebase from 'firebase/app';
+// import 'firebase/firestore';
+import { getFirebaseApp } from '../config/firebase.js';
+import ErrorHandler from '../utils/errorHandler.js';
 
-const db = firebase.firestore();
+const db = getFirebaseApp();
 
 export async function createService(serviceData) {
     try {
