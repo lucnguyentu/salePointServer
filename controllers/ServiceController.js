@@ -89,6 +89,15 @@ export const getAllServicesController = catchAsyncErrors(async (req, res, next) 
     });
 });
 
+export const getAllServicesForManagerController = catchAsyncErrors(async (req, res, next) => {
+    const services = await getAllServices();
+
+    res.status(200).json({
+        success: true,
+        services,
+    });
+});
+
 export const filterServicesByConditionController = catchAsyncErrors(async (req, res, next) => {
     const { condition, value } = req.body;
 
