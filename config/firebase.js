@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import ErrorHandler from '../utils/errorHandler.js';
 import dotenv from 'dotenv';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 dotenv.config();
 
@@ -56,6 +57,14 @@ export const uploadProcessData = async () => {
     }
 };
 
+innitializeFirebaseApp();
+
 const getFirebaseApp = () => app;
 
-export { innitializeFirebaseApp, getFirebaseApp, fireStoreDb };
+const db = getFirestore(app);
+
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
+
+export { innitializeFirebaseApp, getFirebaseApp, fireStoreDb, db, auth, provider };

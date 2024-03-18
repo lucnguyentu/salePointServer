@@ -15,10 +15,10 @@ const port = process.env.PORT || 3000;
 
 // Connecting to database
 innitializeFirebaseApp();
+
 const server = app.listen(process.env.PORT, () => {
     console.log(`Server is working on http://localhost:${port}`);
 });
-
 
 // Unhandled Promise Rejection
 process.on('unhandledRejection', (err) => {
