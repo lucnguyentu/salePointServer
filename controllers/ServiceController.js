@@ -16,7 +16,7 @@ export const newServiceController = catchAsyncErrors(async (req, res, next) => {
     const id = uuidv4();
     const createdAt = new Date();
     const modified = new Date();
-    const isActive = false;
+    const isActive = true;
 
     const serviceData = {
         id,
@@ -72,7 +72,7 @@ export const updateServiceController = catchAsyncErrors(async (req, res, next) =
 export const deleteServiceController = catchAsyncErrors(async (req, res, next) => {
     const serviceId = req.params.serviceId;
 
-    await updateService(serviceId, { isActive: true });
+    await updateService(serviceId, { isActive: false });
 
     res.status(200).json({
         success: true,

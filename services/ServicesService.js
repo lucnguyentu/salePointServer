@@ -65,7 +65,7 @@ export async function getAllServices() {
 export async function getAllActiveServices() {
     try {
         const serviceCollection = collection(db, 'Services');
-        const serviceQuery = query(serviceCollection, where('isActive', '==', false));
+        const serviceQuery = query(serviceCollection, where('isActive', '==', true));
         const serviceSnapshot = await getDocs(serviceQuery);
         const services = [];
 
