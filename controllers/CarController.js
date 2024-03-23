@@ -114,7 +114,7 @@ export const filterCarInfoByConditionController = catchAsyncErrors(async (req, r
 });
 
 export const getCarsOfUser = catchAsyncErrors(async (req, res, next) => {
-    const CarInfo = await getCarsBelongToUser(req.body.id);
+    const CarInfo = await getCarsBelongToUser(req.params.user_id);
 
     res.status(200).json({
         success: true,

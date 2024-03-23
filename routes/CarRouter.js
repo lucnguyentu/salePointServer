@@ -16,7 +16,7 @@ router.post('/car_info/new', newCarInfoController);
 router.get('/car_info/:carInfoId', getCarInfoByIdController);
 router.get('/car_infos', getAllCarInforController);
 router.post('/car_info/filter', filterCarInfoByConditionController);
-router.get('/user/my_car_info', getCarsOfUser);
+router.get('/:user_id/my_car_info', getCarsOfUser);
 
 // for admin
 router.get('/admin/car_infos', getAllCarInfoForManagerController);
