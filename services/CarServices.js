@@ -1,4 +1,5 @@
 import { db } from '../config/firebase.js';
+import convertTimestamp from '../utils/convertTimestamp.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
@@ -12,11 +13,12 @@ export async function createCarInfo(carInfoData) {
     }
 }
 
-export async function getCarInfoById(CarInfoId) {
+export async function getCarInfoById(carInfoId) {
     try {
-        const CarInfoDoc = await getDoc(doc(db, 'CarInfo', CarInfoId));
-        if (CarInfoDoc.exists()) {
-            return CarInfoDoc.data();
+        const carInfoDoc = await getDoc(doc(db, 'CarInfo', carInfoId));
+        if (carInfoDoc.exists()) {
+            const carInfoData = carInfoDoc.data();
+            return convertTimestamp(carInfoData);
         } else {
             return null;
         }
@@ -52,7 +54,8 @@ export async function getAllCarInfo() {
         const CarInfo = [];
 
         CarInfonapshot.forEach((doc) => {
-            CarInfo.push(doc.data());
+            const carInfoData = convertTimestamp(doc.data());
+            CarInfo.push(carInfoData);
         });
 
         return CarInfo;
@@ -70,7 +73,8 @@ export async function getAllActiveCarInfo() {
         const CarInfo = [];
 
         CarInfonapshot.forEach((doc) => {
-            CarInfo.push(doc.data());
+            const carInfoData = convertTimestamp(doc.data());
+            CarInfo.push(carInfoData);
         });
 
         return CarInfo;
@@ -88,7 +92,8 @@ export async function filterCarInfoByCondition(condition, value) {
         const CarInfo = [];
 
         CarInfonapshot.forEach((doc) => {
-            CarInfo.push(doc.data());
+            const carInfoData = convertTimestamp(doc.data());
+            CarInfo.push(carInfoData);
         });
 
         return CarInfo;

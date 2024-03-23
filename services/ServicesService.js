@@ -1,4 +1,5 @@
 import { db } from '../config/firebase.js';
+import convertTimestamp from '../utils/convertTimestamp.js';
 import ErrorHandler from '../utils/errorHandler.js';
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 
@@ -16,7 +17,7 @@ export async function getServiceById(serviceId) {
     try {
         const serviceDoc = await getDoc(doc(db, 'Services', serviceId));
         if (serviceDoc.exists()) {
-            return serviceDoc.data();
+            return convertTimestamp(serviceDoc.data());
         } else {
             return null;
         }
@@ -52,7 +53,8 @@ export async function getAllServices() {
         const services = [];
 
         serviceSnapshot.forEach((doc) => {
-            services.push(doc.data());
+            const serviceData = convertTimestamp(doc.data());
+            services.push(serviceData);
         });
 
         return services;
@@ -70,7 +72,8 @@ export async function getAllActiveServices() {
         const services = [];
 
         serviceSnapshot.forEach((doc) => {
-            services.push(doc.data());
+            const serviceData = convertTimestamp(doc.data());
+            services.push(serviceData);
         });
 
         return services;

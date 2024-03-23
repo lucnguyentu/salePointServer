@@ -29,8 +29,6 @@ export const newServiceController = catchAsyncErrors(async (req, res, next) => {
 
     const service = await createService(serviceData);
 
-    console.log('Service: ', service);
-
     res.status(201).json({
         success: true,
         service,
