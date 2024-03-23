@@ -73,8 +73,6 @@ export async function getAllActiveCarInfo() {
             CarInfo.push(doc.data());
         });
 
-        console.log(CarInfonapshot);
-
         return CarInfo;
     } catch (error) {
         console.error('Error getting all active CarInfo: ', error);

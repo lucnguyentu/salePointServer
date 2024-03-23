@@ -85,7 +85,7 @@ export const deleteCarInfoController = catchAsyncErrors(async (req, res, next) =
 
 export const getAllCarInforController = catchAsyncErrors(async (req, res, next) => {
     const CarInfo = await getAllActiveCarInfo();
-    console.log(CarInfo);
+
     res.status(200).json({
         success: true,
         CarInfo,
