@@ -5,6 +5,7 @@ import {
     getAllCarInfoForManagerController,
     getAllCarInforController,
     getCarInfoByIdController,
+    getCarsOfUser,
     newCarInfoController,
     updateCarInfoController,
 } from '../controllers/CarController.js';
@@ -15,6 +16,7 @@ router.post('/car_info/new', newCarInfoController);
 router.get('/car_info/:carInfoId', getCarInfoByIdController);
 router.get('/car_infos', getAllCarInforController);
 router.post('/car_info/filter', filterCarInfoByConditionController);
+router.get('/user/my_car_info', getCarsOfUser);
 
 // for admin
 router.get('/admin/car_infos', getAllCarInfoForManagerController);

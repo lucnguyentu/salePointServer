@@ -102,3 +102,22 @@ export async function filterCarInfoByCondition(condition, value) {
         throw new ErrorHandler('Error filtering CarInfo by condition: ', 400);
     }
 }
+
+export async function getCarsBelongToUser(id = '0') {
+    try {
+        const CarInfoCollection = collection(db, 'CarInfo');
+        const CarInfoQuery = query(CarInfoCollection, where('user', '==', id));
+        const CarInfonapshot = await getDocs(CarInfoQuery);
+        const CarInfo = [];
+
+        CarInfonapshot.forEach((doc) => {
+            const carInfoData = convertTimestamp(doc.data());
+            CarInfo.push(carInfoData);
+        });
+
+        return CarInfo;
+    } catch (error) {
+        console.error('Error getting all CarInfo: ', error);
+        throw new ErrorHandler('Error getting all CarInfo: ', 400);
+    }
+}

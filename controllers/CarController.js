@@ -6,6 +6,7 @@ import {
     getAllActiveCarInfo,
     getAllCarInfo,
     getCarInfoById,
+    getCarsBelongToUser,
     updateCarInfo,
 } from '../services/CarServices.js';
 import Car from '../models/Car.js';
@@ -109,5 +110,14 @@ export const filterCarInfoByConditionController = catchAsyncErrors(async (req, r
     res.status(200).json({
         success: true,
         CarInfo: filteredCarInfo,
+    });
+});
+
+export const getCarsOfUser = catchAsyncErrors(async (req, res, next) => {
+    const CarInfo = await getCarsBelongToUser(req.body.id);
+
+    res.status(200).json({
+        success: true,
+        CarInfo,
     });
 });
