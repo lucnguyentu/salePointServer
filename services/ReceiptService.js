@@ -54,6 +54,11 @@ export async function createReceipt(ReceiptData) {
             await setDoc(doc(db, 'Point', pointData?.id), pointData, { merge: true });
         }
 
+        const newTotalPrice = ReceiptData.exchange_points
+            ? ReceiptData.totalPrice - ReceiptData.exchange_points
+            : ReceiptData.totalPrice;
+        ReceiptData.totalPrice = newTotalPrice;
+
         const docRef = await setDoc(doc(db, 'Receipt', ReceiptData?.id), ReceiptData, { merge: false });
         return docRef;
     } catch (error) {
