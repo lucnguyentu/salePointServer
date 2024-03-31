@@ -8,11 +8,20 @@ import {
     getReceiptById,
     getCarsBelongToUser,
     updateReceipt,
+    getPointByUserId,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
 
 export const newReceiptController = catchAsyncErrors(async (req, res, next) => {
-    const { totalPrice, totalQuantity, paymentMethod, customer, car_id, detailReceipt = [] } = req.body;
+    const {
+        totalPrice,
+        totalQuantity,
+        paymentMethod,
+        customer,
+        car_id,
+        detailReceipt = [],
+        exchange_points = 0,
+    } = req.body;
 
     const id = uuidv4();
     const createdAt = new Date();
@@ -27,6 +36,7 @@ export const newReceiptController = catchAsyncErrors(async (req, res, next) => {
         customer,
         car_id,
         detailReceipt,
+        exchange_points,
         createdAt,
         modified,
         isActive,
@@ -110,4 +120,22 @@ export const filterReceiptByConditionController = catchAsyncErrors(async (req, r
         success: true,
         Receipt: filteredReceipt,
     });
+});
+
+export const getPointByUserIdController = catchAsyncErrors(async (req, res, next) => {
+    const userId = req.params.userId;
+
+    const pointData = await getPointByUserId(userId);
+
+    if (pointData) {
+        res.status(200).json({
+            success: true,
+            pointData,
+        });
+    } else {
+        res.status(404).json({
+            success: false,
+            message: 'pointData not found',
+        });
+    }
 });

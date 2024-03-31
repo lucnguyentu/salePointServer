@@ -1,11 +1,60 @@
 import { db } from '../config/firebase.js';
 import convertTimestamp from '../utils/convertTimestamp.js';
 import ErrorHandler from '../utils/errorHandler.js';
-import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
+import {
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    setDoc,
+    updateDoc,
+    where,
+    limit,
+} from 'firebase/firestore';
 
 export async function createReceipt(ReceiptData) {
     try {
-        const docRef = await setDoc(doc(db, 'Receipt', ReceiptData?.id), ReceiptData, { merge: true });
+        let pointDoc;
+        const querySnapshot = await getDocs(
+            query(collection(db, 'Point'), where('customer', '==', ReceiptData.customer), limit(1)),
+        );
+        let currentExchangePoints = ReceiptData.totalPrice / 1000;
+
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                pointDoc = doc.data();
+            });
+
+            let newPoint = 0;
+            if (ReceiptData.exchange_points) {
+                if (pointDoc.point < ReceiptData.exchange_points) {
+                    throw new ErrorHandler('Error over echange points: ', 400);
+                }
+                newPoint = pointDoc.point - ReceiptData.exchange_points + currentExchangePoints;
+            } else {
+                newPoint = pointDoc.point + currentExchangePoints;
+            }
+            await updateDoc(doc(db, 'Point', pointDoc.id), { point: newPoint });
+        } else {
+            const point = currentExchangePoints;
+            const pointId = uuidv4();
+
+            const pointData = {
+                id: pointId,
+                point,
+                customer: ReceiptData.customer,
+                createdAt: ReceiptData.createdAt,
+                modified: ReceiptData.modified,
+                isActive: true,
+            };
+
+            await setDoc(doc(db, 'Point', pointData?.id), pointData, { merge: true });
+        }
+
+        const docRef = await setDoc(doc(db, 'Receipt', ReceiptData?.id), ReceiptData, { merge: false });
         return docRef;
     } catch (error) {
         console.error('Error creating Receipt: ', error);
@@ -119,5 +168,25 @@ export async function getCarsBelongToUser(id = '0') {
     } catch (error) {
         console.error('Error getting all Receipt: ', error);
         throw new ErrorHandler('Error getting all Receipt: ', 400);
+    }
+}
+
+export async function getPointByUserId(userId) {
+    try {
+        let pointDoc;
+        const querySnapshot = await getDocs(query(collection(db, 'Point'), where('customer', '==', userId), limit(1)));
+
+        if (!querySnapshot.empty) {
+            querySnapshot.forEach((doc) => {
+                pointDoc = doc.data();
+            });
+
+            return convertTimestamp(pointDoc);
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error('Error getting Point by userId: ', error);
+        throw new ErrorHandler('Error getting Point by userId: ', 400);
     }
 }
