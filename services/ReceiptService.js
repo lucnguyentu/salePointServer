@@ -176,6 +176,7 @@ export async function getCarsBelongToUser(id = '0') {
     }
 }
 
+// Point
 export async function getPointByUserId(userId) {
     try {
         let pointDoc;
@@ -193,5 +194,24 @@ export async function getPointByUserId(userId) {
     } catch (error) {
         console.error('Error getting Point by userId: ', error);
         throw new ErrorHandler('Error getting Point by userId: ', 400);
+    }
+}
+
+export async function getAllPoints() {
+    try {
+        const PointCollection = collection(db, 'Point');
+        const PointQuery = query(PointCollection);
+        const Pointnapshot = await getDocs(PointQuery);
+        const Point = [];
+
+        Pointnapshot.forEach((doc) => {
+            const PointData = convertTimestamp(doc.data());
+            Point.push(PointData);
+        });
+
+        return Point;
+    } catch (error) {
+        console.error('Error getting all Point: ', error);
+        throw new ErrorHandler('Error getting all Point: ', 400);
     }
 }

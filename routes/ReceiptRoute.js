@@ -8,6 +8,7 @@ import {
     filterReceiptByConditionController,
     getAllReceiptForManagerController,
     getPointByUserIdController,
+    getAllPointsController,
 } from '../controllers/ReceiptController.js';
 
 const router = express.Router();
@@ -23,6 +24,7 @@ router.put('/receipt/:serviceId', updateReceiptController);
 router.delete('/receipt/:serviceId', deleteReceiptController);
 
 // get point
+router.get('/points', getAllPointsController);
 router.get('/point/:userId', getPointByUserIdController);
 
 export default router;

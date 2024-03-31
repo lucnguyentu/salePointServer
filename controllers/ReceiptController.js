@@ -9,6 +9,7 @@ import {
     getCarsBelongToUser,
     updateReceipt,
     getPointByUserId,
+    getAllPoints,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
 
@@ -122,6 +123,7 @@ export const filterReceiptByConditionController = catchAsyncErrors(async (req, r
     });
 });
 
+// Point
 export const getPointByUserIdController = catchAsyncErrors(async (req, res, next) => {
     const userId = req.params.userId;
 
@@ -138,4 +140,13 @@ export const getPointByUserIdController = catchAsyncErrors(async (req, res, next
             message: 'pointData not found',
         });
     }
+});
+
+export const getAllPointsController = catchAsyncErrors(async (req, res, next) => {
+    const Points = await getAllPoints();
+
+    res.status(200).json({
+        success: true,
+        Points,
+    });
 });
