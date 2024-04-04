@@ -14,14 +14,14 @@ import {
 const router = express.Router();
 
 router.post('/receipt/new', newReceiptController);
-router.get('/receipt/:serviceId', getReceiptByIdController);
+router.get('/receipt/:receiptId', getReceiptByIdController);
 router.get('/receipt', getAllReceiptController);
 router.post('/receipt/filter', filterReceiptByConditionController);
 
 // for admin
 router.get('/admin/receipt/', getAllReceiptForManagerController);
-router.put('/receipt/:serviceId', updateReceiptController);
-router.delete('/receipt/:serviceId', deleteReceiptController);
+router.put('/receipt/:receiptId', updateReceiptController);
+router.delete('/receipt/:receiptId', deleteReceiptController);
 
 // get point
 router.get('/points', getAllPointsController);
