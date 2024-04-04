@@ -12,6 +12,7 @@ import {
     getAllPoints,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
+import { getHistoryByUser } from '../services/HistoryService.js';
 
 export const newReceiptController = catchAsyncErrors(async (req, res, next) => {
     const {
@@ -148,5 +149,15 @@ export const getAllPointsController = catchAsyncErrors(async (req, res, next) =>
     res.status(200).json({
         success: true,
         Points,
+    });
+});
+
+// History
+export const getHistoryByUserIdController = catchAsyncErrors(async (req, res, next) => {
+    const Histories = await getHistoryByUser(req.params.userId);
+
+    res.status(200).json({
+        success: true,
+        Histories,
     });
 });
