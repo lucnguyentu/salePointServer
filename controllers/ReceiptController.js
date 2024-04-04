@@ -85,7 +85,7 @@ export const updateReceiptController = catchAsyncErrors(async (req, res, next) =
 });
 
 export const deleteReceiptController = catchAsyncErrors(async (req, res, next) => {
-    const ReceiptId = req.params.ReceiptId;
+    const ReceiptId = req.params.receiptId;
 
     await updateReceipt(ReceiptId, { isActive: false });
 
