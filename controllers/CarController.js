@@ -2,6 +2,7 @@ import { catchAsyncErrors } from '../middleware/catchAsyncErrors.js';
 import { v4 as uuidv4 } from 'uuid';
 import {
     createCarInfo,
+    deleteCarInfo,
     filterCarInfoByCondition,
     getAllActiveCarInfo,
     getAllCarInfo,
@@ -76,11 +77,12 @@ export const updateCarInfoController = catchAsyncErrors(async (req, res, next) =
 export const deleteCarInfoController = catchAsyncErrors(async (req, res, next) => {
     const CarInfoId = req.params.carInfoId;
 
-    await updateCarInfo(CarInfoId, { isActive: false });
+    const carInfo = await deleteCarInfo(CarInfoId);
 
     res.status(200).json({
         success: true,
-        message: 'CarInfo deleted successfully',
+        message: carInfo.isActive ? 'CarInfo restore successfully' : 'CarInfo deleted successfully',
+        carInfo,
     });
 });
 

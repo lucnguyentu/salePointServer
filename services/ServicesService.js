@@ -38,7 +38,15 @@ export async function updateService(serviceId, newData) {
 
 export async function deleteService(serviceId) {
     try {
-        await deleteDoc(doc(db, 'Services', serviceId));
+        const ServiceDoc = await getDoc(doc(db, 'Services', serviceId));
+        if (ServiceDoc.exists()) {
+            const ServiceData = ServiceDoc.data();
+            await updateDoc(doc(db, 'Services', serviceId), { isActive: !ServiceData.isActive });
+            const newService = await getDoc(doc(db, 'Services', serviceId));
+            return convertTimestamp(newService.data());
+        } else {
+            throw new ErrorHandler('Not found Service: ', 400);
+        }
     } catch (error) {
         console.error('Error deleting service: ', error);
         throw new ErrorHandler('Error deleting service: ', 400);

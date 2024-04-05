@@ -70,11 +70,12 @@ export const updateServiceController = catchAsyncErrors(async (req, res, next) =
 export const deleteServiceController = catchAsyncErrors(async (req, res, next) => {
     const serviceId = req.params.serviceId;
 
-    await updateService(serviceId, { isActive: false });
+    const Service = await deleteService(serviceId);
 
     res.status(200).json({
         success: true,
-        message: 'Service deleted successfully',
+        message: Service.isActive ? 'Service restore successfully' : 'Service deleted successfully',
+        Service,
     });
 });
 

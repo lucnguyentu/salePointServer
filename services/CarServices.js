@@ -39,7 +39,15 @@ export async function updateCarInfo(CarInfoId, newData) {
 
 export async function deleteCarInfo(CarInfoId) {
     try {
-        await deleteDoc(doc(db, 'CarInfo', CarInfoId));
+        const carInfoDoc = await getDoc(doc(db, 'CarInfo', CarInfoId));
+        if (carInfoDoc.exists()) {
+            const carInfoData = carInfoDoc.data();
+            await updateDoc(doc(db, 'CarInfo', CarInfoId), { isActive: !carInfoData.isActive });
+            const newCarInfo = await getDoc(doc(db, 'CarInfo', CarInfoId));
+            return convertTimestamp(newCarInfo.data());
+        } else {
+            throw new ErrorHandler('Not found CarInfo: ', 400);
+        }
     } catch (error) {
         console.error('Error deleting CarInfo: ', error);
         throw new ErrorHandler('Error deleting CarInfo: ', 400);

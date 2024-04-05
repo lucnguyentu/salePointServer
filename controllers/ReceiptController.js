@@ -10,6 +10,7 @@ import {
     updateReceipt,
     getPointByUserId,
     getAllPoints,
+    deleteReceipt,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
 import { getHistoryByUser } from '../services/HistoryService.js';
@@ -87,11 +88,12 @@ export const updateReceiptController = catchAsyncErrors(async (req, res, next) =
 export const deleteReceiptController = catchAsyncErrors(async (req, res, next) => {
     const ReceiptId = req.params.receiptId;
 
-    await updateReceipt(ReceiptId, { isActive: false });
+    const Receipt = await deleteReceipt(ReceiptId);
 
     res.status(200).json({
         success: true,
-        message: 'Receipt deleted successfully',
+        message: Receipt.isActive ? 'Receipt restore successfully' : 'Receipt deleted successfully',
+        Receipt,
     });
 });
 

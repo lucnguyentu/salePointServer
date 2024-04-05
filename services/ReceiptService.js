@@ -93,7 +93,15 @@ export async function updateReceipt(ReceiptId, newData) {
 
 export async function deleteReceipt(ReceiptId) {
     try {
-        await deleteDoc(doc(db, 'Receipt', ReceiptId));
+        const ReceiptDoc = await getDoc(doc(db, 'Receipt', ReceiptId));
+        if (ReceiptDoc.exists()) {
+            const ReceiptData = ReceiptDoc.data();
+            await updateDoc(doc(db, 'Receipt', ReceiptId), { isActive: !ReceiptData.isActive });
+            const newReceipt = await getDoc(doc(db, 'Receipt', ReceiptId));
+            return convertTimestamp(newReceipt.data());
+        } else {
+            throw new ErrorHandler('Not found Receipt: ', 400);
+        }
     } catch (error) {
         console.error('Error deleting Receipt: ', error);
         throw new ErrorHandler('Error deleting Receipt: ', 400);
