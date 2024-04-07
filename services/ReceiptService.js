@@ -67,6 +67,14 @@ export async function createReceipt(ReceiptData) {
     }
 }
 
+export async function newReceiptByBanking(ReceiptId) {
+    try {
+    } catch (error) {
+        console.error('Error banking payment: ', error);
+        throw new ErrorHandler('Error banking payment: ', 400);
+    }
+}
+
 export async function getReceiptById(ReceiptId) {
     try {
         const ReceiptDoc = await getDoc(doc(db, 'Receipt', ReceiptId));

@@ -13,7 +13,12 @@ import {
     deleteReceipt,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
-import { getHistoryByUser } from '../services/HistoryService.js';
+import {
+    getHistoryByUser,
+    getTopCustomer,
+    getTopCustomerByMonth,
+    getTotalRevenue,
+} from '../services/HistoryService.js';
 
 export const newReceiptController = catchAsyncErrors(async (req, res, next) => {
     const {
@@ -161,5 +166,25 @@ export const getHistoryByUserIdController = catchAsyncErrors(async (req, res, ne
     res.status(200).json({
         success: true,
         Histories,
+    });
+});
+
+// Total revenue
+export const getTotalRevenueController = catchAsyncErrors(async (req, res, next) => {
+    const Revenue = await getTotalRevenue();
+
+    res.status(200).json({
+        success: true,
+        Revenue,
+    });
+});
+
+// Top customers
+export const getTopCustomerController = catchAsyncErrors(async (req, res, next) => {
+    const topCustomer = await getTopCustomer();
+
+    res.status(200).json({
+        success: true,
+        topCustomer,
     });
 });

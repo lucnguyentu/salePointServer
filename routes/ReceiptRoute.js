@@ -10,6 +10,8 @@ import {
     getPointByUserIdController,
     getAllPointsController,
     getHistoryByUserIdController,
+    getTotalRevenueController,
+    getTopCustomerController,
 } from '../controllers/ReceiptController.js';
 
 const router = express.Router();
@@ -30,5 +32,9 @@ router.get('/point/:userId', getPointByUserIdController);
 
 // history
 router.get('/history/:userId', getHistoryByUserIdController);
+
+// statistical
+router.get('/statistical/totalRevenue', getTotalRevenueController);
+router.get('/statistical/topCustomer', getTopCustomerController);
 
 export default router;
