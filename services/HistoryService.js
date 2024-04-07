@@ -121,12 +121,12 @@ export async function getTopCustomer() {
                 customerTotalPoints[customer] = 0;
             }
 
-            customerTotalPoints[customer] += points;
+            customerTotalPoints[customer] += points / 1000 - receiptData.exchange_points;
         });
 
         const customerTotalPointsArray = Object.keys(customerTotalPoints).map((customer) => ({
             customer,
-            totalPoints: customerTotalPoints[customer] / 1000,
+            totalPoints: customerTotalPoints[customer],
         }));
 
         customerTotalPointsArray.sort((a, b) => b.totalPoints - a.totalPoints);
@@ -142,7 +142,6 @@ export async function getTopCustomerByMonth() {
     try {
         const querySnapshot = await getDocs(query(collection(db, 'Receipt'), orderBy('createdAt', 'desc')));
 
-        // Tạo một đối tượng lưu trữ tổng giá trị của các hóa đơn của từng khách hàng theo từng tháng
         const customerTotalPriceByMonth = {};
 
         querySnapshot.forEach((doc) => {
@@ -160,17 +159,14 @@ export async function getTopCustomerByMonth() {
                 customerTotalPriceByMonth[monthYear][customer] = 0;
             }
 
-            customerTotalPriceByMonth[monthYear][customer] += totalPrice;
+            customerTotalPriceByMonth[monthYear][customer] += totalPrice / 1000 - receiptData.exchange_points;
         });
 
-        // Tạo một mảng lưu trữ thông tin về tổng giá trị của các hóa đơn của từng khách hàng theo từng tháng
         const topCustomersByMonth = {};
 
-        // Lặp qua từng tháng
         Object.keys(customerTotalPriceByMonth).forEach((monthYear) => {
             const customerTotalPrice = customerTotalPriceByMonth[monthYear];
 
-            // Tạo mảng mới để sắp xếp theo tổng giá trị giảm dần
             const sortedCustomers = Object.keys(customerTotalPrice)
                 .map((customer) => ({
                     customer,
@@ -178,7 +174,6 @@ export async function getTopCustomerByMonth() {
                 }))
                 .sort((a, b) => b.totalPrice - a.totalPrice);
 
-            // Lấy top 5 khách hàng có tổng giá trị lớn nhất
             topCustomersByMonth[monthYear] = sortedCustomers.slice(0, 5);
         });
 
