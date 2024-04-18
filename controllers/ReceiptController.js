@@ -11,6 +11,7 @@ import {
     getPointByUserId,
     getAllPoints,
     deleteReceipt,
+    filterReceipt,
 } from '../services/ReceiptService.js';
 import Receipt from '../models/Receipt.js';
 import {
@@ -59,7 +60,7 @@ export const newReceiptController = catchAsyncErrors(async (req, res, next) => {
 });
 
 export const getReceiptByIdController = catchAsyncErrors(async (req, res, next) => {
-    const ReceiptId = req.params.ReceiptId;
+    const ReceiptId = req.params.receiptId;
 
     const Receipt = await getReceiptById(ReceiptId);
 
@@ -77,7 +78,7 @@ export const getReceiptByIdController = catchAsyncErrors(async (req, res, next) 
 });
 
 export const updateReceiptController = catchAsyncErrors(async (req, res, next) => {
-    const ReceiptId = req.params.ReceiptId;
+    const ReceiptId = req.params.receiptId;
     const newData = req.body;
 
     newData.modified = new Date();
@@ -124,6 +125,17 @@ export const filterReceiptByConditionController = catchAsyncErrors(async (req, r
     const { condition, value } = req.body;
 
     const filteredReceipt = await filterReceiptByCondition(condition, value);
+
+    res.status(200).json({
+        success: true,
+        Receipt: filteredReceipt,
+    });
+});
+
+export const filterReceiptController = catchAsyncErrors(async (req, res, next) => {
+    const condition = req.body;
+
+    const filteredReceipt = await filterReceipt(condition);
 
     res.status(200).json({
         success: true,

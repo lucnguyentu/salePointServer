@@ -12,6 +12,7 @@ import {
     getHistoryByUserIdController,
     getTotalRevenueController,
     getTopCustomerController,
+    filterReceiptController,
 } from '../controllers/ReceiptController.js';
 
 const router = express.Router();
@@ -19,7 +20,8 @@ const router = express.Router();
 router.post('/receipts/new', newReceiptController);
 router.get('/receipts/:receiptId', getReceiptByIdController);
 router.get('/receipts', getAllReceiptController);
-router.post('/receipts/filter', filterReceiptByConditionController);
+// router.post('/receipts/filter', filterReceiptByConditionController);
+router.post('/receipts/filter', filterReceiptController);
 
 // for admin
 router.get('/admin/receipts', getAllReceiptForManagerController);

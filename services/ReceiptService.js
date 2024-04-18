@@ -13,7 +13,9 @@ import {
     updateDoc,
     where,
     limit,
+    orderBy,
 } from 'firebase/firestore';
+import moment from 'moment';
 
 export async function createReceipt(ReceiptData) {
     try {
@@ -167,6 +169,47 @@ export async function filterReceiptByCondition(condition, value) {
         });
 
         return Receipt;
+    } catch (error) {
+        console.error('Error filtering Receipt by condition: ', error);
+        throw new ErrorHandler('Error filtering Receipt by condition: ', 400);
+    }
+}
+
+// Filter by date & status
+export async function filterReceipt(condition) {
+    const { startDate, endDate, isActive } = condition;
+    try {
+        const receiptCollection = collection(db, 'Receipt');
+        let receiptQuery = query(receiptCollection);
+
+        receiptQuery = query(receiptQuery, orderBy('createdAt', 'desc'));
+
+        const receiptSnapshot = await getDocs(receiptQuery);
+        let receipts = [];
+
+        receiptSnapshot.forEach((doc) => {
+            const receiptData = convertTimestamp(doc.data());
+            receipts.push(receiptData);
+        });
+
+        if (startDate || endDate) {
+            receipts = receipts.filter((receipt) => {
+                const createdAt = moment(receipt.createdAt);
+                if (startDate && createdAt.isBefore(startDate)) {
+                    return false;
+                }
+                if (endDate && createdAt.isAfter(endDate)) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        if (isActive !== undefined) {
+            receipts = receipts.filter((receipt) => receipt.isActive === isActive);
+        }
+
+        return receipts;
     } catch (error) {
         console.error('Error filtering Receipt by condition: ', error);
         throw new ErrorHandler('Error filtering Receipt by condition: ', 400);

@@ -1,6 +1,7 @@
 node_modules
 .env
 .prettierrc
+/bank.sql
 
 /.pnp
 .pnp.js
